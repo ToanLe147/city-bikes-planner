@@ -73,11 +73,13 @@ var loaded = function(){
     radius: 50000, renderer: fpRender } ).addTo(myApp.map).bindPopup("Ahoy! From <a alt=Null Island target=_blank href=https://en.wikipedia.org/wiki/Null_Island>Null Island</a>");
 };
 
-if (document.readyState === "complete" ||
-    (document.readyState !== "loading" && !document.documentElement.doScroll)
-) {
-  callback();
-} else {
-  document.addEventListener("DOMContentLoaded", loaded);
-}
+loaded()
+
+// if (document.readyState === "complete" ||
+//     (document.readyState !== "loading" && !document.documentElement.doScroll)
+// ) {
+//   callback();
+// } else {
+//   document.addEventListener("DOMContentLoaded", loaded);
+// }
 // =========================================================
