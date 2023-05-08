@@ -22,8 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Python venv
-venv
-venv.web
-pynecone.db.web
