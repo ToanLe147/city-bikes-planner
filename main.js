@@ -23,6 +23,18 @@ function initmap(lat, long, zoom) {
 }
 
 
+function loadStations() {
+	alert("Alo alo")
+	var marker = L.marker([60.2, 24.95]).addTo(myApp.map);
+	// var circle = L.circle([60.2, 24.95], {
+	// 	color: 'red',
+	// 	fillColor: '#f03',
+	// 	fillOpacity: 0.5,
+	// 	radius: 300, renderer: fpRender
+	// }).addTo(myApp.map).bindPopup("Station: ABC. 12/20 bikes");
+}
+
+
 L.Canvas.FPCanvas = L.Canvas.extend({
 	options: {
 		width: 1,
@@ -68,12 +80,7 @@ var loaded = function () {
 	myApp.map = initmap(lat, long, zoom);
 
 	var fpRender = L.canvas.fpCanvas({ padding: 0.5 })
-	var circle = L.circle([0, 0], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: 50000, renderer: fpRender
-	}).addTo(myApp.map).bindPopup("Ahoy! From <a alt=Null Island target=_blank href=https://en.wikipedia.org/wiki/Null_Island>Null Island</a>");
 };
 
 loaded()
+document.getElementById("ConfirmBtn").onclick = loadStations()
