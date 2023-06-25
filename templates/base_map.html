@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
+
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    
+
     <script>
         L_NO_TOUCH = false;
         L_DISABLE_3D = false;
     </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>    
+
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    
+
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>
@@ -47,7 +47,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .search-box input[type="text"] {
             flex: 1;
             border: none;
@@ -55,7 +55,7 @@
             font-size: 16px;
             padding: 6px;
         }
-        
+
         .search-box button {
             background-color: #4285f4;
             color: #fff;
@@ -65,18 +65,37 @@
             cursor: pointer;
         }
     </style>
-        
+    <script>
+        // var x = document.getElementById("demo");
+
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          } else {
+            // x.innerHTML = "Geolocation is not supported by this browser.";
+            console.log("Geolocation is not supported by this browser.")
+          }
+        }
+
+        function showPosition(position) {
+        //   x.innerHTML = "Latitude: " + position.coords.latitude +
+        //   "<br>Longitude: " + position.coords.longitude;
+            console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude)
+        }
+    </script>
 </head>
 <body>
-    <form action = "/" method = "post" class="search-box">        
+    <form action = "/" method = "post" class="search-box">
         <input type="text" name="search-input" placeholder="Enter a location">
-        <button class="search-button">Search</button>        
-    </form>    
-    
+        <button class="search-button">Search</button>
+        <button onclick="getLocation()">Current Location</button>
+        <p id="demo"></p>
+    </form>
+
     <div class="folium-map" id="map">
         {{ map_html|safe }}
     </div>
-        
+
 </body>
 
 </html>
