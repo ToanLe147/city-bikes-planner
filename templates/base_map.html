@@ -24,7 +24,8 @@
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>
-        #map_092e7e1dadfd89988adc735d0a5741ef {
+        /* #map_092e7e1dadfd89988adc735d0a5741ef { */
+        #map {
             position: absolute;
             width: 100.0%;
             height: calc(100vh - 40px); /* Subtract the search box height */
@@ -40,57 +41,46 @@
             top: 20px;
             left: 80px;
             z-index: 100;
-            background-color: #fff;
+            background-color: #4285f4;
+            color: #fff;
             padding: 10px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
         }
-
-        .search-box input[type="text"] {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            padding: 6px;
-        }
-
-        .search-box button {
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
     </style>
     <script>
-        // var x = document.getElementById("demo");
-
         function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            // x.innerHTML = "Geolocation is not supported by this browser.";
-            console.log("Geolocation is not supported by this browser.")
-          }
-        }
+            // Get the user's location using navigator.geolocation
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
 
-        function showPosition(position) {
-        //   x.innerHTML = "Latitude: " + position.coords.latitude +
-        //   "<br>Longitude: " + position.coords.longitude;
-            console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude)
+                // Make an AJAX request to your Flask backend
+                $.ajax({
+                    // type: "POST",
+                    type: "GET",
+                    // url: "/process_location",
+                    url: `/mylocation/${latitude}/${longitude}`,
+                    // data: { latitude: latitude, longitude: longitude },
+                    success: function (response) {
+                        console.log("Location sent to Flask backend");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    },
+                });
+            });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
         }
     </script>
 </head>
 <body>
-    <form action = "/" method = "post" class="search-box">
-        <input type="text" name="search-input" placeholder="Enter a location">
-        <button class="search-button">Search</button>
-        <button onclick="getLocation()">Current Location</button>
-        <p id="demo"></p>
-    </form>
+    <button class="search-box" onclick="getLocation()" >Current Location</button>
 
     <div class="folium-map" id="map">
         {{ map_html|safe }}

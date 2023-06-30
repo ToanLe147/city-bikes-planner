@@ -1,59 +1,61 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title>My Maps</title>    
-    <style>
-        /* Set the map container size */
-        #map {
-            height: calc(100vh - 40px); /* Subtract the search box height */
-            width: 100%;
-            z-index: 1; /* Ensure the map is behind the search box */
+  <head>
+    <title>Map</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Map</h1>
+    <div id="map"></div>
+
+    <button onclick="startLocationUpdates()">Start Location Updates</button>
+    <button onclick="stopLocationUpdates()">Stop Location Updates</button>
+
+    <script>
+      function updateLocation(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        // Send the latitude and longitude to the Flask backend
+        $.ajax({
+          type: "POST",
+          url: "/update_location",
+          data: { latitude: latitude, longitude: longitude },
+          success: function (response) {
+            console.log("Location sent to Flask backend");
+          },
+          error: function (xhr, status, error) {
+            console.error(error);
+          },
+        });
+      }
+
+      function errorHandler(error) {
+        console.error("Error getting location:", error.message);
+      }
+
+      function startLocationUpdates() {
+        if (navigator.geolocation) {
+          var watchOptions = {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000,
+          };
+
+          // Start watching for location updates
+          var watchId = navigator.geolocation.watchPosition(
+            updateLocation,
+            errorHandler,
+            watchOptions
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
         }
-        
-        /* Style the search box */
-        .search-box {
-            position: absolute;
-            top: 20px;
-            left: 80px;
-            z-index: 100;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-        }
-        
-        .search-box input[type="text"] {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            padding: 6px;
-        }
-        
-        .search-box button {
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    
-    <form action="/" method="post">
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="Enter a location">
-            <button class="search-button">Search</button>
-        </div>
-    </form>    
-    
-    <div id="map">
-        {{ map_html|safe }}
-    </div>
-    
-</body>
+      }
+
+      function stopLocationUpdates() {
+        // Stop watching for location updates
+        navigator.geolocation.clearWatch(watchId);
+      }
+    </script>
+  </body>
 </html>
